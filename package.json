@@ -1,16 +1,15 @@
 {
-  "name": "whenhome",
+  "name": "whenyougohome",
   "version": "1.0.0",
-  "description": "whenAreYouGoHome_package",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
     "discord.js": "^14.15.3",
     "nodemon": "^3.1.4"
-  },
-  "type": "module"
+  }
 }
