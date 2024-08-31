@@ -44,9 +44,9 @@ client.on(Events.InteractionCreate, async interaction => {
     } catch (error) {
         console.error(error);
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'There was an error while executing this coommand!', ephemeral:true});
+            await interaction.followUp({ content: '명령 실행중 오류가 발생했습니다.', ephemeral:true});
         } else {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral:true});
+            await interaction.reply({ content: '명령 실행중 오류가 발생했습니다.', ephemeral:true});
         }
         
     }
@@ -59,7 +59,8 @@ client.on(Events.InteractionCreate, async interaction => {
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
->>>>>>> study
+
 
 // Log in to Discord with your client's token
 client.login(token);
+
