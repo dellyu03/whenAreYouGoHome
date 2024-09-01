@@ -32,7 +32,7 @@ async function handleInteraction(interaction) {
         await assignRoleToMember(member, role);
 
         const nickname = member.nickname || target.username;
-        await interaction.editReply(`전역일이 성공적으로 "${guild.name}" 서버에 기록되었습니다.`); // 변경된 응답
+        await interaction.editReply(`${nickname}의 전역일이 성공적으로 "${guild.name}" 서버에 기록되었습니다.`); // 변경된 응답
     } catch (error) {
         await interaction.editReply('멤버 정보를 가져오거나 역할을 추가하는 중 오류가 발생했습니다.'); // 변경된 응답
     }
