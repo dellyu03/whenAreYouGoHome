@@ -50,12 +50,12 @@ module.exports = {
         }
 
         if (choice == "notice") {
+            await interaction.reply(`개발중입니다!`)
+        }else if (choice == "compare") {
             var today = '2024-09-01';
-            const dday = '2024-09-02';
+            const dday = '2023-02-14';
             res = calculateDateDifferences(today, dday)
             await interaction.reply(`${day}까지 ${res}!`)
-        }else if (choice == "compare") {
-            await interaction.reply("hello");
         }
     }
 };

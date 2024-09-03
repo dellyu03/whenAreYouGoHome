@@ -29,7 +29,7 @@ function calculateDateDifferences(todayDateStr, ddayDateStr) {
         result = `D+${daysDifference}일`;
     } else if (daysDifference > 0) {
         // D-day가 현재 날짜보다 이전인 경우
-        result = `D-${Math.abs(daysDifference)}일`;
+        result = `D-${Math(daysDifference)}일`;
     } else {
         // D-day가 현재 날짜와 같은 경우
         result = `D-day`;
