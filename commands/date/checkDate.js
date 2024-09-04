@@ -1,14 +1,12 @@
-// commands/enlistmentDday.js
+// commands/checkRoleDate.js
 const { SlashCommandBuilder } = require('discord.js');
-const { classifyRoles } = require('../../utility/roleUtils.js');
-const { calculateDday } = require('../../utility/dateUtils.js');
+const { classifyRoles } = require('../../utility/roleUtils');
 const fetchMember = require('../../utility/fetchMember');
-
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('디데이')
-        .setDescription('서버 멤버의 입대일 또는 전역일을 기준으로 D-Day를 계산합니다.')
+        .setName('조회')
+        .setDescription('서버 멤버의 입대일 또는 전역일을 조회합니다.')
         .addStringOption(option =>
             option
                 .setName('기준')
@@ -21,10 +19,10 @@ module.exports = {
         .addUserOption(option =>
             option
                 .setName('target')
-                .setDescription('디데이를 확인할 유저')
+                .setDescription('조회할 유저')
                 .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply();
+        await interaction.deferReply(); // 비동기 작업을 처리하기 위해 응답을 연기합니다.
 
         const 기준 = interaction.options.getString('기준');
         const target = interaction.options.getUser('target');
@@ -37,6 +35,7 @@ module.exports = {
         }
 
         try {
+            // fetchMember 함수를 사용하여 멤버 객체를 가져옵니다.
             const member = await fetchMember(guild, target.id);
 
             if (!member) {
@@ -44,7 +43,7 @@ module.exports = {
                 return;
             }
 
-            // 기준에 따라 역할을 분류하고 해당 역할을 찾습니다.
+            // classifyRoles 함수를 사용하여 역할을 구분합니다.
             const { enlistmentRoles, dischargeRoles } = classifyRoles(member);
             let relevantRoles = 기준 === '입대일' ? enlistmentRoles : dischargeRoles;
 
@@ -57,17 +56,18 @@ module.exports = {
             const dateMatch = relevantRole.match(/\d{2}-\d{2}-\d{2}/);
 
             if (!dateMatch) {
-                await interaction.editReply(`${기준} 형식을 찾을 수 없습니다.`);
+                await interaction.editReply(`${기준} 날짜 형식을 찾을 수 없습니다.`);
                 return;
             }
 
-            const relevantDate = dateMatch[0].replace(/-/g, ''); // 날짜에서 하이픈을 제거하여 YYMMDD 형식으로 변환
-            const dDay = calculateDday(relevantDate);
+            const relevantDate = dateMatch[0]; // YY-MM-DD 형식의 날짜 추출
+            const displayName = member.nickname || target.username;
+            const response = `${displayName}님의 ${기준}은 ${relevantDate}입니다.`;
 
-            await interaction.editReply(`${member.nickname || target.username}님의 ${기준}은 ${dDay}입니다.`);
+            await interaction.editReply(response);
         } catch (error) {
-            console.error('Error fetching roles or calculating D-Day:', error);
-            await interaction.editReply('역할 정보를 가져오거나 D-Day를 계산하는 중 오류가 발생했습니다.');
+            console.error('Error fetching roles or calculating date:', error);
+            await interaction.editReply('역할 정보를 가져오거나 날짜를 계산하는 중 오류가 발생했습니다.');
         }
     }
 };

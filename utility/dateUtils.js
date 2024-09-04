@@ -8,41 +8,31 @@ function formatDate(date) {
     return `${year}년 ${month}월 ${day}일`;
 }
 
-// 오늘 날짜와 D-day 계산 함수
-function calculateDateDifferences(todayDateStr, ddayDateStr) {
-    // 문자열을 Date 객체로 변환
-    const today = new Date(todayDateStr);
-    const dday = new Date(ddayDateStr);
+// utility/dateUtils.js
 
-    // 날짜 차이 계산
-    const timeDifference = dday - today; // 밀리초 단위
-    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // 일 단위로 변환
+/**
+ * 주어진 날짜와 오늘 날짜의 차이를 계산하여 D-Day 형식으로 반환하는 함수
+ * @param {string} enlistmentDate - '입대일' 역할에서 추출한 날짜 문자열 (형식: 'YYMMDD')
+ * @returns {string} - D-Day 형식의 문자열 ('D+N' 또는 'D-N')
+ */
+function calculateDday(enlistmentDate) {
+    const today = new Date();
+    const [year, month, day] = [
+        `20${enlistmentDate.substring(0, 2)}`,
+        enlistmentDate.substring(2, 4),
+        enlistmentDate.substring(4, 6)
+    ];
 
-    // 형식화된 날짜 문자열 생성
-    const formattedToday = formatDate(today);
-    const formattedDday = formatDate(dday);
+    const enlistment = new Date(`${year}-${month}-${day}`);
+    const timeDifference = today - enlistment;
+    const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-    let result = '';
-
-    if (daysDifference < 0) {
-        // D-day가 현재 날짜보다 이후인 경우
-        result = `D+${daysDifference}일`;
-    } else if (daysDifference > 0) {
-        // D-day가 현재 날짜보다 이전인 경우
-        result = `D-${Math(daysDifference)}일`;
-    } else {
-        // D-day가 현재 날짜와 같은 경우
-        result = `D-day`;
-    }
-
-    return result.trim();
+    return dayDifference >= 0 ? `D+${dayDifference}` : `D${dayDifference}`;
 }
 
+
 // 두 함수를 모듈로 내보내기
-module.exports = {
-    formatDate,
-    calculateDateDifferences
-};
+
 function sliceDate(rawDate)
 {
     const string = String(rawDate);
@@ -68,6 +58,6 @@ function sliceDate(rawDate)
 // 두 함수를 모듈로 내보내기
 module.exports = {
     formatDate,
-    calculateDateDifferences,
-    sliceDate
+    sliceDate,
+    calculateDday
 };
